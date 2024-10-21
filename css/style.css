@@ -1,12 +1,30 @@
+/* main font */
 @font-face {
     font-family: 'LOTTERIACHAB';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/LOTTERIACHAB.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
+/* sub font */
 @font-face {
     font-family: 'Cafe24Ssurround';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+}
+
+:root{
+    /* color */
+    --black: #000000;
+    --color1: #A4B89F;
+    --color2: #C7D8C2;
+    --color3: #E5E8E1;
+
+    /* font-size */
+    --navSize:0.069rem;
+    --detailSize:0.167rem;
+    --loginSize:0.125rem;
+    --textSize:0.104rem;
+    --smallSize:0.208rem;
+    --diarySize:0.167rem;
 }
