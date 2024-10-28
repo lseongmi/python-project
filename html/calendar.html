@@ -4,8 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>calender</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/calendar.css">
 </head>
 <body>
-    
+    <section>
+        <div class="section-container">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <img src="../image/ChevronLeft (1).png" alt="Previous" id="prevBtn">
+                    <h2 id="currentMonth"></h2>
+                    <img src="../image/ChevronRight (1).png" alt="Next" id="nextBtn">
+                </div>
+                <div class="calendar-container-grid">
+                    <div class="calendar-days">
+                        <div class="day">일</div>
+                        <div class="day">월</div>
+                        <div class="day">화</div>
+                        <div class="day">수</div>
+                        <div class="day">목</div>
+                        <div class="day">금</div>
+                        <div class="day">토</div>
+                    </div>
+                    <div class="calendar-dates" id="calendarDates"></div>
+                </div>
+            </div>
+
+            <div class="diary-container">
+                <div class="today-header">
+                    <div id="today"></div>
+                    <div id="emotion"><img src="../image/기분 조금 안좋은표정.png" alt=""></div>
+                </div>
+                <div class="today-text">오늘은 시험주간이라 시험공부를 했다. </div>
+                <div class="today-text"> 시험기간이 얼마남지않았는데 공부를 하지 않아서</div>
+                <div class="today-text">조금 걱정되는 마음</div>
+            </div>
+    </section> 
+
+    <script src="../js/calendar.js"></script>
 </body>
 </html>

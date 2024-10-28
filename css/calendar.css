@@ -1,0 +1,88 @@
+@media screen and (max-width: 844px) {
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .calendar-container {
+    width: 300px;
+    margin: 30px auto;
+    padding: 10px;
+  }
+
+  .calendar-header {
+    margin-top: 10rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: bold;
+    border-bottom: 1px solid #C7D8C2;
+    padding-bottom: 5px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+
+  .day {
+    padding: 5px;
+  }
+
+  .calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 5px;
+    height: 15rem;
+  }
+
+  .date {
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .date:hover {
+    background-color: #E5E8E1;
+    border-radius: 5px;
+  }
+
+  #currentMonth {
+    font-size: 20px;
+  }
+
+  .diary-container {
+    display: none;
+    margin-left: 8px;
+    width: 90%;
+    border: 1px solid #C7D8C2;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .today-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+  #today {
+    padding-left: 10px;
+  }
+  #emotion > img {
+    width: 30px;
+    height: 30px;
+  }
+  .today-text {
+    margin-top: 10px;
+    text-align: left;
+    padding-left: 10px;
+  }
+  
+
+
+}
