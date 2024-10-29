@@ -82,7 +82,18 @@
     text-align: left;
     padding-left: 10px;
   }
-  
+  .next {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    color: #C7D8C2;
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+  .next > img {
+    width:5%;
+  }
 
 
 }
