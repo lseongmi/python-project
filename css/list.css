@@ -1,3 +1,17 @@
 @media screen and (max-width: 844px) {
-    
+    #list-plus-container, .listtext-container {
+        width: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+    }
+
+    .list-container > div > img {
+        width: 30px;
+    }
+    .listtext-container {
+        padding-bottom: 10px;
+        border-bottom: 2px solid #E5E8E1;
+    }
 }
