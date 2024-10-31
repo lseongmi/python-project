@@ -83,9 +83,11 @@ a {
     text-decoration: none;
 }
 
-/* button css 여기서 고쳐주세염 */
 button{
     margin-top: 40px;
     width: 70px;
     height: 30px;
+    border: 1px solid #C7D8C2;
+    background-color: #C7D8C2;
+    border-radius: 10px;
 }
