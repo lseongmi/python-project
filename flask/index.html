@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>일기 감정 분석</title>
+</head>:
+<body>
+    <h1>일기 감정 분석 및 요약</h1>
+    <textarea id="diary" placeholder="오늘 하루를 일기로 남겨보세요." rows="5" cols="40"></textarea>
+    <button id="submitDiary">일기 제출</button>
+    
+    <p id="summary"></p>
+    <p id="emotionMessage"></p>
+    
+    <script>
+        const updateUI = (data) => {
+            // 요약 데이터 표시
+            document.getElementById("summary").innerText = `오늘 하루 요약: ${data.summary}`;
+            
+            // 감정 메시지 표시
+            const emotionMessageEl = document.getElementById("emotionMessage");
+            switch (data.emotion) {
+                case "joy":
+                    emotionMessageEl.innerText = "오늘은 즐거운 하루였네요!";
+                    break;
+                case "sadness":
+                    emotionMessageEl.innerText = "오늘은 힘든 하루셨군요. 위로를 보냅니다.";
+                    break;
+                default:
+                    emotionMessageEl.innerText = "오늘도 수고하셨습니다!";
+            }
+        };
+
+        const handleError = () => {
+            document.getElementById("summary").innerText = "일기 처리 중 오류가 발생했습니다.";
+            document.getElementById("emotionMessage").innerText = "";
+        };
+
+        document.getElementById("submitDiary").addEventListener("click", async () => {
+            const diaryText = document.getElementById("diary").value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/process_diary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ diary: diaryText })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateUI(data);
+                } else {
+                    handleError();
+                }
+            } catch (error) {
+                handleError();
+            }
+        });
+    </script>
+</body>
+</html>

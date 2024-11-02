@@ -19,14 +19,15 @@ def process_diary():
 
     # 감정 분석
     sentiment = sia.polarity_scores(diary_text)
-    primary_emotion = 'neutral'  # 기본 감정
+    primary_emotion = 'neutral'  # 기본 감정 설정
     if sentiment['compound'] >= 0.05:
         primary_emotion = 'joy'
     elif sentiment['compound'] <= -0.05:
         primary_emotion = 'sadness'
 
-    # 요약 (간단한 예시)
-    summary = diary_text[:50] + '...'  # 첫 50자 요약
+    # 일기 요약 (한 줄 요약 예시: 가장 긴 문장을 요약으로 사용)
+    sentences = nltk.sent_tokenize(diary_text)
+    summary = max(sentences, key=len) if sentences else "내용이 부족하여 요약할 수 없습니다."
 
     # 결과 응답
     result = {
@@ -37,4 +38,4 @@ def process_diary():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True)  
+    app.run(debug=True)
