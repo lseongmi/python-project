@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/list.css">
-    
 </head>
 <body>
     <header>
@@ -15,32 +14,34 @@
     <section>
         <div id="list-plus-container">
             <div><img src="../image/plus (2).png" alt=""></div>
-            <div class="listtext-container">
+            <div class="plus-container">
                 <div class="list-text">일정 추가하기</div>
-                <div class="time">0:00~0:00</div>
+                <div class="time">0:00</div>
             </div>  
         </div>
 
-        <div class="list-container"></div>
+        <div class="list-container">
+            <!-- 일정 항목이 추가될 부분 -->
+        </div>
     </section>
 
     <section>
-        <form action="">
-            <div id="pop-up">
-                <header>
-                    <div>일정추가</div>
-                </header>
-
-                <div id="list-write"><input type="text" placeholder="일정 작성"></div>
-                <div id="time-write"><input type="time" placeholder="시간 작성"></div>
-
-
-                <button id="list-submit">
-                    <div>완료</div>
-                </button>
+        <div id="pop-up">
+            <header>
+                <div>일정추가</div>
+            </header>
+    
+            <div id="list-write">
+                <input type="text" id="schedule-input" placeholder="일정 작성">
             </div>
-        </form>
-        
+            <div id="time-write">
+                <input type="time" id="time-input" placeholder="시간 작성">
+            </div>
+    
+            <button type="button" id="list-submit">
+                <div>완료</div>
+            </button>
+        </div>
     </section>
     
     <script src="../js/list.js"></script>
