@@ -3,8 +3,8 @@ from flask_cors import CORS
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 
-# NLTK 데이터 다운로드
-nltk.download('vader_lexicon')
+# NLTK 데이터 다운로드 (필요한 경우 이 부분은 주석 처리)
+# nltk.download('vader_lexicon')
 
 app = Flask(__name__)
 CORS(app)  # CORS 설정
@@ -25,9 +25,8 @@ def process_diary():
     elif sentiment['compound'] <= -0.05:
         primary_emotion = 'sadness'
 
-    # 일기 요약 (한 줄 요약 예시: 가장 긴 문장을 요약으로 사용)
-    sentences = nltk.sent_tokenize(diary_text)
-    summary = max(sentences, key=len) if sentences else "내용이 부족하여 요약할 수 없습니다."
+    # 일기 요약 (첫 문장 요약)
+    summary = diary_text.split('.')[0] if diary_text else "내용이 부족하여 요약할 수 없습니다."
 
     # 결과 응답
     result = {
