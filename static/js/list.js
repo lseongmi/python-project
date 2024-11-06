@@ -19,7 +19,7 @@ function addScheduleToDOM(schedule, time, completed = false) {
     const newItem = document.createElement('div');
     newItem.className = 'listtext-container';
     newItem.innerHTML = `
-        <img src="${completed ? '../image/Frame 8.png' : '../image/Ellipse 15.png'}" class="list-img" onclick="toggleComplete(this, '${schedule}')">
+        <img src="${completed ? '../static/image/Frame 8.png' : '../static/image/Ellipse 15.png'}" class="list-img" onclick="toggleComplete(this, '${schedule}')">
         <div class="list-text">${schedule}</div>
         <div class="time">${time}</div>
     `;
@@ -28,7 +28,7 @@ function addScheduleToDOM(schedule, time, completed = false) {
 
 function toggleComplete(imgElement, schedule) {
     const isCompleted = imgElement.src.includes('completed.png');
-    imgElement.src = isCompleted ? '../image/Ellipse 15.png' : '../image/Frame 8.png';
+    imgElement.src = isCompleted ? '../static/image/Ellipse 15.png' : '../static/image/Frame 8.png';
 
     fetch('http://127.0.0.1:5000/complete_schedule', {
         method: 'POST',
