@@ -4,12 +4,13 @@ import os
 
 app = Flask(__name__,
             template_folder=os.path.join(os.pardir, 'templates'),  # 최상위 폴더의 'templates' 폴더 경로
-            static_folder=os.path.join(os.pardir, 'static'))      # 최상위 폴더의 'static' 폴더 경로
+            static_folder=os.path.join(os.pardir, 'static'))       # 최상위 폴더의 'static' 폴더 경로
 CORS(app)
 
 schedules = []
 
-@app.route('/')
+# '/list' 경로로 메인 페이지 설정
+@app.route('/list')
 def index():
     return render_template('list.html')
 
