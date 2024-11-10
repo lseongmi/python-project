@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/login.css">
 </head>
 <body>
-    <div class="register-container">
+    <div class="signup-container">
         <h1>ToDays</h1>
-        <form action="/register" method="POST">
-            <input type="text" name="userid" placeholder="id" required>
+        <form method="POST">
+            <input type="text" name="id" placeholder="id" required>
             <input type="password" name="password" placeholder="password" required>
-            <button type="submit">Register</button>
+            <a href="../templates/login.html"><button type="submit">Sign Up</button></a>
         </form>
-        <p><a href="/login">로그인</a></p>
     </div>
 </body>
 </html>
