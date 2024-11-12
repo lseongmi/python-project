@@ -13,6 +13,11 @@ CORS(app)  # CORS 설정
 
 USER_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'userinfo.json')
 
+@app.route('/')
+@login_required
+def index():
+    return render_template('index.html', username=current_user.username)
+
 # 사용자 정보 로딩 함수
 def load_users():
     if os.path.exists(USER_FILE_PATH):
@@ -75,11 +80,6 @@ def signup():
         return redirect(url_for('login'))
 
     return render_template('signup.html')
-
-@app.route('/index')
-@login_required
-def index():
-    return render_template('index.html', username=current_user.username)
 
 @app.route('/logout')
 @login_required
