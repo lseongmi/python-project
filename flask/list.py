@@ -18,6 +18,11 @@ USER_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'userinfo.json')
 def index():
     return render_template('index.html', username=current_user.username)
 
+@app.route('/main')
+@login_required
+def main():
+    return render_template('main.html', username=current_user.username)
+
 # 사용자 정보 로딩 함수
 def load_users():
     if os.path.exists(USER_FILE_PATH):
@@ -55,7 +60,7 @@ def login():
             if user['user'] == username and user['password'] == password:
                 user_obj = User(user_id=username, username=username)
                 login_user(user_obj)
-                return redirect(url_for('index'))
+                return redirect(url_for('main'))
 
         flash('Invalid username or password', 'error')
 
