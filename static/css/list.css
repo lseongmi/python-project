@@ -3,6 +3,12 @@
     body {
         font-family: Arial, sans-serif;
     }
+    
+    .prev-btn {
+        width: 15px;
+        height: 27px;
+        margin: 19px 0 0 18px;
+    }
 
     section {
         display: flex;
