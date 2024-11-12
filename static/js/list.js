@@ -6,30 +6,42 @@ const listContainer = document.querySelector('.list-container');
 
 // 로그인된 사용자 이름을 가져오는 함수 (예시로 current_user.username을 서버로부터 가져오는 방법)
 function getLoggedInUser() {
-    return fetch('/get_logged_in_user')
-    .then(response => response.json())
-    .then(data => {
-        if (data.user) {
-            console.log("Logged in user:", data.user);
-        } else {
-            console.log("User is not logged in");
-        }
-    })
-    .catch(error => console.error('Error fetching logged-in user:', error));
+    return fetch('http://127.0.0.1:5001/get_logged_in_user')
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.user) {
+                return data.user;  // 정상적인 사용자 반환
+            } else {
+                console.log('No user logged in.');
+                return null;  // 로그인된 사용자가 없을 때
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching logged-in user:', error);
+            return null;
+        });
 }
+
 
 function loadSchedules() {
     getLoggedInUser().then(username => {
-        fetch(`http://127.0.0.1:5001/get_schedules?user=${username}`)
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
-                    addScheduleToDOM(item.schedule, item.time, item.completed);
-                });
-            })
-            .catch(error => console.error('Fetch Error:', error));
+        console.log('Loaded user:', username);  // 로그인된 사용자 이름 출력
+        if (username) {  // 로그인된 사용자가 있을 때
+            fetch(`http://127.0.0.1:5001/get_schedules?user=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        addScheduleToDOM(item.schedule, item.time, item.completed);
+                    });
+                })
+                .catch(error => console.error('Fetch Error:', error));
+        } else {
+            console.log('No logged-in user found');
+        }
     });
 }
+
+
 
 function addScheduleToDOM(schedule, time, completed = false) {
     const newItem = document.createElement('div');
@@ -75,6 +87,7 @@ function toggleComplete(imgElement, schedule) {
     });
 }
 
+
 listsubmit.addEventListener('click', function() {
     const scheduleText = document.querySelector('#list-write input').value;
     const timeText = document.querySelector('#time-write input').value;
@@ -111,4 +124,4 @@ listpluscontainer.addEventListener('click', function() {
     body.style.backgroundColor = popup.style.display === "flex" ? "rgba(0, 0, 0, 0.2)" : "";
 });
 
-window.onload = loadSchedules;
+window.onload = loadSchedules;  // 페이지 로드 시 스케줄 로딩

@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_cors import CORS  # CORS 추가
 import json
 import os
 
@@ -8,6 +9,9 @@ app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.secret_key = 'your_secret_key'  # 비밀 키 설정 (세션을 위해 필요)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+
+# CORS 설정
+CORS(app)  # 모든 출처에서의 요청을 허용
 
 # 사용자 정보 로딩
 def load_users():
@@ -40,11 +44,13 @@ def login():
             if user['user'] == username and user['password'] == password:
                 user_obj = User(user_id=username, username=username)
                 login_user(user_obj)
-                return redirect(url_for('index'))
+                return redirect(url_for('index'))  # 로그인 후 index로 리다이렉트
         
         flash('Invalid username or password', 'error')
 
-    return render_template('login.html')  # 템플릿 경로는 기본값인 templates 폴더
+    return render_template('login.html')  # 로그인 페이지 템플릿
+
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -79,7 +85,12 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-
+@app.route('/get_logged_in_user')
+def get_logged_in_user():
+    if current_user.is_authenticated:
+        return jsonify({'user': current_user.username})  # 로그인된 사용자 이름 반환
+    else:
+        return jsonify({'user': None})  # 로그인되지 않은 경우
 
 if __name__ == '__main__':
     app.run(debug=True)
