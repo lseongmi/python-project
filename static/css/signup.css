@@ -8,7 +8,7 @@
         margin: 0;
     }
 
-.login-container {
+.signup-container {
     background-color: var(--color3);
         padding: 60px 20px;
         text-align: center;
@@ -49,7 +49,7 @@
         border: none;
         border-radius: 50px;
         font-family: 'LOTTERIACHAB', sans-serif;
-        width: 80%; /* 버튼 너비 조정 */
+        width: 15rem;
         color: #A4B89F;
     }
     a {
