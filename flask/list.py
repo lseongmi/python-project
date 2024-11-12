@@ -16,7 +16,7 @@ USER_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'userinfo.json')
 @app.route('/')
 @login_required
 def index():
-    return render_template('login.html', username=current_user.username)
+    return render_template('index.html', username=current_user.username)
 
 # 사용자 정보 로딩 함수
 def load_users():

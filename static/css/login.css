@@ -43,14 +43,16 @@
         border-bottom: 1px solid #000000;
     }
 
-    button {
+    a > button {
         background-color: #C7D8C2;
         padding: 10px;
         border: none;
         border-radius: 50px;
         font-family: 'LOTTERIACHAB', sans-serif;
-        width: 80%; /* 버튼 너비 조정 */
+        width: 16rem; /* 버튼 너비 조정 */
+        height: 50px;
         color: #A4B89F;
+        font-size: 20px;
     }
     a {
         text-decoration: none;
