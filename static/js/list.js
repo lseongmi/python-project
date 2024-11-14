@@ -3,6 +3,20 @@ const popup = document.getElementById("pop-up");
 const body = document.body;
 const listsubmit = document.getElementById('list-submit');
 const listContainer = document.querySelector('.list-container');
+const currentDay = document.getElementById("currentday");
+
+let currentDate;
+
+const displayCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;  // 월은 0부터 시작하므로 +1 필요
+    const date = today.getDate();
+
+    currentDate = `${year}년 ${month}월 ${date}일`;  // 현재 날짜를 변수에 저장
+    currentDay.innerText = currentDate;  // 화면에 표시
+}
+
 
 // 로그인된 사용자 이름을 가져오는 함수 (예시로 current_user.username을 서버로부터 가져오는 방법)
 function getLoggedInUser() {
@@ -40,7 +54,6 @@ function loadSchedules() {
         }
     });
 }
-
 
 
 function addScheduleToDOM(schedule, time, completed = false) {
@@ -93,6 +106,9 @@ listsubmit.addEventListener('click', function() {
     const timeText = document.querySelector('#time-write input').value;
 
     if (scheduleText && timeText) {
+        const today = new Date();
+        const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`; // 현재 날짜 포맷
+
         getLoggedInUser().then(username => {
             fetch('http://127.0.0.1:5001/add_schedule', {
                 method: 'POST',
@@ -100,10 +116,11 @@ listsubmit.addEventListener('click', function() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user: username,  // 로그인된 사용자 이름을 전송
+                    user: username,
                     schedule: scheduleText,
                     time: timeText,
-                    completed: false
+                    completed: false,
+                    date: formattedDate  // 날짜도 함께 전송
                 })
             })
             .then(response => response.json())
@@ -119,9 +136,15 @@ listsubmit.addEventListener('click', function() {
     }
 });
 
+
 listpluscontainer.addEventListener('click', function() {
     popup.style.display = popup.style.display === "flex" ? "none" : "flex";
     body.style.backgroundColor = popup.style.display === "flex" ? "rgba(0, 0, 0, 0.2)" : "";
 });
 
-window.onload = loadSchedules;  // 페이지 로드 시 스케줄 로딩
+// 페이지 로드 시 스케줄 로딩 및 현재 날짜 표시
+window.onload = function() {
+    displayCurrentDate();
+    loadSchedules();
+};
+

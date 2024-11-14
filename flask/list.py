@@ -196,5 +196,11 @@ def clear_schedules():
 
     return jsonify({"message": f"All schedules for user '{username}' have been cleared."})
 
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

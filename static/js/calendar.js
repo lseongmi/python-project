@@ -3,6 +3,7 @@ const currentMonthElement = document.getElementById("currentMonth");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const today = document.getElementById("today");
+const listnocomplate = document.getElementsByClassName("listnocomplate")[0];
 
 const currentDate = new Date();
 let currentMonth = currentDate.getMonth();
@@ -71,3 +72,35 @@ function handleDateClick(date) {
   today.textContent = selectedDate;
   diaryContainer.style.display = "block"; // 날짜 클릭 시 다이어리 컨테이너 표시
 }
+
+// async function sendDataToServer(data) {
+//   const url = '/main'; // 서버의 엔드포인트 URL
+
+//   try {
+//     const response = await fetch(url, {
+//       method: 'POST', // HTTP 메서드
+//       headers: {
+//         'Content-Type': 'application/json', // 전송하는 데이터의 타입
+//       },
+//       body: JSON.stringify(data) // JavaScript 객체를 JSON 문자열로 변환
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+
+//     const result = await response.json(); // 서버로부터의 응답을 JSON으로 파싱
+//     console.log('서버 응답:', result);
+//     return result;
+//   } catch (error) {
+//     console.error('오류 발생:', error);
+//   }
+// }
+
+// // 사용 예시
+// const dataToSend = {
+//   username: 'example_user',
+//   email: 'user@example.com'
+// };
+
+// sendDataToServer(dataToSend);
