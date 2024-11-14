@@ -3,11 +3,75 @@ const currentMonthElement = document.getElementById("currentMonth");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const today = document.getElementById("today");
-const listnocomplate = document.getElementsByClassName("listnocomplate")[0];
+const listnocomplete = document.querySelector(".list-nocomplete");
+const diaryContainer = document.querySelector(".diary-container");
 
 const currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
+
+// 로그인된 사용자 정보를 가져오는 함수
+function getLoggedInUser() {
+  return fetch('http://127.0.0.1:5001/get_logged_in_user')  // 로그인된 사용자 정보 요청
+      .then(response => response.json())
+      .then(data => {
+          if (data && data.user) {
+              return data.user;  // 정상적으로 로그인된 사용자 반환
+          } else {
+              console.log('No user logged in.');
+              return null;  // 로그인된 사용자가 없으면 null 반환
+          }
+      })
+      .catch(error => {
+          console.error('Error fetching logged-in user:', error);
+          return null;  // 오류 발생 시 null 반환
+      });
+}
+
+// 완료되지 않은 일정을 가져오는 함수
+// 완료되지 않은 일정을 가져오는 함수
+function fetchIncompleteSchedules(date) {
+  getLoggedInUser().then(username => {
+      if (username) {
+          const formattedDate = `${currentYear}년 ${currentMonth + 1}월 ${date}일`; // 날짜 형식 맞추기
+          fetch(`http://127.0.0.1:5001/get_schedules?user=${username}&date=${encodeURIComponent(formattedDate)}`)
+              .then(response => response.json())
+              .then(data => {
+                  if (Array.isArray(data)) {
+                      listnocomplete.innerHTML = '';  // 기존 목록 비우기
+                      if (data.length > 0) {
+                          data.forEach(item => {
+                              addScheduleToDOM(item.schedule, item.time, item.completed);
+                          });
+                      } else {
+                          // 완료되지 않은 일정이 없으면 메시지 표시
+                          listnocomplete.innerHTML = '완료되지 않은 일정이 없습니다.';  // 데이터가 없을 경우 표시
+                      }
+                  } else {
+                      console.error('No schedules found or fetch error');
+                  }
+              })
+              .catch(error => console.error('Fetch Error:', error));
+      } else {
+          console.log('No logged-in user found');
+      }
+  });
+}
+
+
+// 스케줄을 DOM에 추가하는 함수
+function addScheduleToDOM(schedule, time, completed) {
+  // 완료된 일정은 화면에 표시하지 않음
+  const scheduleElement = document.createElement('div');
+  scheduleElement.classList.add('schedule-item');
+  scheduleElement.innerHTML = `
+      <span class="schedule-time">${time}</span>
+      <span class="schedule-text">${schedule}</span>
+      <span class="schedule-status">${completed ? '완료' : '미완료'}</span>
+  `;
+  listnocomplete.appendChild(scheduleElement);
+}
+
 
 // 달력을 렌더링하는 함수
 function renderCalendar() {
@@ -39,9 +103,15 @@ function renderCalendar() {
 }
 
 // 클릭된 날짜를 today 요소에 표시하는 함수
+// 날짜 클릭 시 오늘 날짜에 맞는 일정 불러오기
 function handleDateClick(date) {
   const selectedDate = `${currentMonth + 1}월 ${date}일`;
   today.textContent = selectedDate;
+  diaryContainer.style.display = "block"; // 날짜 클릭 시 다이어리 컨테이너 표시
+  listnocomplete.style.display = "flex";
+
+  // 선택된 날짜를 fetchIncompleteSchedules에 전달
+  fetchIncompleteSchedules(date);  // 날짜 전달
 }
 
 // 이전 달 버튼 클릭 이벤트
@@ -63,44 +133,6 @@ nextBtn.addEventListener("click", () => {
   }
   renderCalendar();
 });
+
+// 초기 실행
 renderCalendar();
-
-const diaryContainer = document.querySelector(".diary-container"); // 다이어리 컨테이너 선택
-
-function handleDateClick(date) {
-  const selectedDate = `${currentMonth + 1}월 ${date}일`;
-  today.textContent = selectedDate;
-  diaryContainer.style.display = "block"; // 날짜 클릭 시 다이어리 컨테이너 표시
-}
-
-// async function sendDataToServer(data) {
-//   const url = '/main'; // 서버의 엔드포인트 URL
-
-//   try {
-//     const response = await fetch(url, {
-//       method: 'POST', // HTTP 메서드
-//       headers: {
-//         'Content-Type': 'application/json', // 전송하는 데이터의 타입
-//       },
-//       body: JSON.stringify(data) // JavaScript 객체를 JSON 문자열로 변환
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     const result = await response.json(); // 서버로부터의 응답을 JSON으로 파싱
-//     console.log('서버 응답:', result);
-//     return result;
-//   } catch (error) {
-//     console.error('오류 발생:', error);
-//   }
-// }
-
-// // 사용 예시
-// const dataToSend = {
-//   username: 'example_user',
-//   email: 'user@example.com'
-// };
-
-// sendDataToServer(dataToSend);

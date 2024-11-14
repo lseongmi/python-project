@@ -37,13 +37,13 @@ function getLoggedInUser() {
 }
 
 
-function loadSchedules() {
+function loadSchedules(date = currentDate) {  // 기본값으로 현재 날짜를 설정
     getLoggedInUser().then(username => {
-        console.log('Loaded user:', username);  // 로그인된 사용자 이름 출력
-        if (username) {  // 로그인된 사용자가 있을 때
-            fetch(`http://127.0.0.1:5001/get_schedules?user=${username}`)
+        if (username) {
+            fetch(`http://127.0.0.1:5001/get_schedules?user=${username}&date=${encodeURIComponent(date)}`)
                 .then(response => response.json())
                 .then(data => {
+                    listContainer.innerHTML = ''; // 기존 일정 제거 후 새 일정 로드
                     data.forEach(item => {
                         addScheduleToDOM(item.schedule, item.time, item.completed);
                     });
@@ -54,6 +54,7 @@ function loadSchedules() {
         }
     });
 }
+
 
 
 function addScheduleToDOM(schedule, time, completed = false) {

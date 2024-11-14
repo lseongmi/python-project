@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_cors import CORS
 import json
 import os
+from datetime import datetime
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.secret_key = 'your_secret_key'  # 비밀 키 설정
@@ -97,7 +98,6 @@ def get_logged_in_user():
     user = current_user.username  # 예시로 로그인된 사용자 정보 가져오기
     return jsonify({'user': user})
 
-
 # /list 경로 설정 (스케줄 페이지)
 @app.route('/list')
 @login_required
@@ -112,39 +112,57 @@ def add_schedule():
     username = data.get("user")
     schedule_text = data.get("schedule")
     time_text = data.get("time")
+    schedule_date = data.get("date")  # 날짜 정보 추가
     completed = data.get("completed", False)
 
     users = load_users()
 
-    # 해당 사용자의 스케줄을 찾기
     user_found = False
     for user in users["users"]:
         if user["user"] == username:
             user_found = True
             if "schedules" not in user:
                 user["schedules"] = []
-            user["schedules"].append({"schedule": schedule_text, "time": time_text, "completed": completed})
+            user["schedules"].append({
+                "schedule": schedule_text,
+                "time": time_text,
+                "date": schedule_date,  # 날짜 정보 저장
+                "completed": completed
+            })
             break
 
     if not user_found:
         users["users"].append({
             "user": username,
-            "schedules": [{"schedule": schedule_text, "time": time_text, "completed": completed}]
+            "schedules": [{
+                "schedule": schedule_text,
+                "time": time_text,
+                "date": schedule_date,  # 날짜 정보 저장
+                "completed": completed
+            }]
         })
 
     save_users(users)
 
-    return jsonify({"schedule": schedule_text, "time": time_text, "completed": completed})
+    return jsonify({"schedule": schedule_text, "time": time_text, "date": schedule_date, "completed": completed})
 
 # 스케줄 조회
 @app.route('/get_schedules', methods=['GET'])
 @login_required
 def get_schedules():
     username = request.args.get("user")
+    date = request.args.get("date")  # date 파라미터 추가
     users = load_users()
+
     for user in users["users"]:
         if user["user"] == username:
-            return jsonify(user.get("schedules", []))
+            # 날짜가 일치하는 스케줄만 반환
+            schedules = [
+                s for s in user.get("schedules", [])
+                if s.get("date") == date  # 날짜 문자열 비교
+            ]
+            return jsonify(schedules)
+    
     return jsonify({"error": "User not found!"}), 404
 
 # 스케줄 완료 처리
@@ -196,11 +214,9 @@ def clear_schedules():
 
     return jsonify({"message": f"All schedules for user '{username}' have been cleared."})
 
-
 @app.route('/calendar')
 def calendar():
     return render_template('calendar.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
