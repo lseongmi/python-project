@@ -58,6 +58,40 @@ function fetchIncompleteSchedules(date) {
   });
 }
 
+// 클릭된 날짜의 일기 데이터를 가져오는 함수
+// 클릭된 날짜의 일기 데이터를 가져오는 함수
+function fetchDiaryForDate(date) {
+  getLoggedInUser().then(username => {
+    if (username) {
+      const formattedDate = `${currentYear}년 ${currentMonth + 1}월 ${date}일`; // 날짜 형식 맞추기
+      fetch(`http://127.0.0.1:5001/get_diary?user=${username}&date=${encodeURIComponent(formattedDate)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.diaries && data.diaries.length > 0) {
+            const latestDiary = data.diaries[data.diaries.length - 1];
+            
+            // 감정 이모지와 일기 요약 표시
+            const emotionImg = document.getElementById("emotion").querySelector("img");
+            emotionImg.src = latestDiary.emotion;
+            const diaryTextSummary = document.querySelector(".today-text");
+            diaryTextSummary.textContent = latestDiary.diary.substring(0, 10) + "..."; // 한 줄 요약
+          } else {
+            // 일기가 없을 경우 기본 메시지 표시 및 이모지 제거
+            document.querySelector(".today-text").textContent = "일기가 없습니다.";
+            document.getElementById("emotion").querySelector("img").src = ""; // 이모지 제거
+          }
+        })
+        .catch(error => console.error('Error fetching diary:', error));
+    } else {
+      console.log('No logged-in user found');
+    }
+  });
+}
+
+
+
+
+
 
 // 스케줄을 DOM에 추가하는 함수
 function addScheduleToDOM(schedule, time, completed) {
@@ -104,14 +138,15 @@ function renderCalendar() {
 
 // 클릭된 날짜를 today 요소에 표시하는 함수
 // 날짜 클릭 시 오늘 날짜에 맞는 일정 불러오기
+// handleDateClick 함수 수정
 function handleDateClick(date) {
   const selectedDate = `${currentMonth + 1}월 ${date}일`;
   today.textContent = selectedDate;
-  diaryContainer.style.display = "block"; // 날짜 클릭 시 다이어리 컨테이너 표시
+  diaryContainer.style.display = "block";
   listnocomplete.style.display = "flex";
 
-  // 선택된 날짜를 fetchIncompleteSchedules에 전달
-  fetchIncompleteSchedules(date);  // 날짜 전달
+  fetchIncompleteSchedules(date);  // 일정 가져오기
+  fetchDiaryForDate(date);  // 선택된 날짜의 일기 가져오기
 }
 
 // 이전 달 버튼 클릭 이벤트

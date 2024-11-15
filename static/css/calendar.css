@@ -100,12 +100,26 @@
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
-    color: #C7D8C2;
+
     margin-bottom: 10px;
     font-size: 15px;
   }
   .next > img {
     width:5%;
+  }
+  #link-text {
+    color: #C7D8C2;
+  }
+  .prev-btn {
+    position: absolute;
+    top: 20px; /* 원하는 만큼 조정 */
+    left: 20px; /* 원하는 만큼 조정 */
+    width: 30px; /* 아이콘 크기 조정 */
+    height: 30px;
+    cursor: pointer;
+    z-index: 10; /* 다른 요소들 위로 오게 설정 */
+    width: 15px;
+    height: 27px;
   }
 
 

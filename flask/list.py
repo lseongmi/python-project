@@ -218,5 +218,66 @@ def clear_schedules():
 def calendar():
     return render_template('calendar.html')
 
+@app.route('/diary')
+@login_required
+def diary():
+    return render_template('emotion.html')
+
+@app.route('/save_diary', methods=['POST'])
+@login_required
+def save_diary():
+    data = request.json
+    username = data.get("user")
+    date = data.get("date")
+    emotion = data.get("emotion")
+    diary_text = data.get("diary")
+
+    users = load_users()
+    user_found = False
+    for user in users["users"]:
+        if user["user"] == username:
+            user_found = True
+            if "diaries" not in user:
+                user["diaries"] = []
+            user["diaries"].append({
+                "date": date,
+                "emotion": emotion,
+                "diary": diary_text
+            })
+            break
+
+    if not user_found:
+        users["users"].append({
+            "user": username,
+            "diaries": [{
+                "date": date,
+                "emotion": emotion,
+                "diary": diary_text
+            }]
+        })
+
+    save_users(users)
+    return jsonify({"message": "Diary saved successfully"})
+
+# 특정 날짜의 일기를 가져오는 API
+@app.route('/get_diary', methods=['GET'])
+@login_required
+def get_diary():
+    username = request.args.get("user")
+    date = request.args.get("date")
+    users = load_users()
+
+    for user in users["users"]:
+        if user["user"] == username:
+            # 해당 날짜의 일기를 가져옴
+            diaries = [
+                diary for diary in user.get("diaries", [])
+                if diary.get("date") == date
+            ]
+            return jsonify({"diaries": diaries})
+    
+    return jsonify({"error": "No diaries found for this date"}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
