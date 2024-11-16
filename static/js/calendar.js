@@ -59,26 +59,40 @@ function fetchIncompleteSchedules(date) {
 }
 
 // 클릭된 날짜의 일기 데이터를 가져오는 함수
-// 클릭된 날짜의 일기 데이터를 가져오는 함수
 function fetchDiaryForDate(date) {
+  const emotionImageMap = {
+    "😊": "../static/image/행복한 표정.png",
+    "😲": "../static/image/놀라운 표정.png",
+    "😐": "../static/image/soso표정.png",
+    "😞": "../static/image/기분 드러운 표정.png",
+    "😡": "../static/image/기분 조금 안좋은표정.png"
+  };
+
   getLoggedInUser().then(username => {
     if (username) {
       const formattedDate = `${currentYear}년 ${currentMonth + 1}월 ${date}일`; // 날짜 형식 맞추기
       fetch(`http://127.0.0.1:5001/get_diary?user=${username}&date=${encodeURIComponent(formattedDate)}`)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(data => {
-          if (data.diaries && data.diaries.length > 0) {
-            const latestDiary = data.diaries[data.diaries.length - 1];
-            
-            // 감정 이모지와 일기 요약 표시
-            const emotionImg = document.getElementById("emotion").querySelector("img");
-            emotionImg.src = latestDiary.emotion;
-            const diaryTextSummary = document.querySelector(".today-text");
-            diaryTextSummary.textContent = latestDiary.diary.substring(0, 10) + "..."; // 한 줄 요약
+          const emotionImg = document.getElementById("emotion").querySelector("img");
+
+          if (data.diary) {
+            const emotionKey = data.emotion || "";
+            // 감정에 따른 이미지 설정
+            emotionImg.src = emotionImageMap[emotionKey] || "";  
+            emotionImg.alt = emotionKey; // 이미지 대체 텍스트 설정
+
+            document.querySelector(".today-text").textContent =
+              data.diary.length > 10 ? data.diary.substring(0, 10) + "..." : data.diary; // 요약 표시
           } else {
-            // 일기가 없을 경우 기본 메시지 표시 및 이모지 제거
             document.querySelector(".today-text").textContent = "일기가 없습니다.";
-            document.getElementById("emotion").querySelector("img").src = ""; // 이모지 제거
+            emotionImg.src = ""; // 감정 이미지 제거
+            emotionImg.alt = ""; // 대체 텍스트 제거
           }
         })
         .catch(error => console.error('Error fetching diary:', error));
@@ -87,10 +101,6 @@ function fetchDiaryForDate(date) {
     }
   });
 }
-
-
-
-
 
 
 // 스케줄을 DOM에 추가하는 함수

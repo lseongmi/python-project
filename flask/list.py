@@ -1,8 +1,10 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from nltk.sentiment import SentimentIntensityAnalyzer
 from flask_cors import CORS
 import json
 import os
+import nltk
 from datetime import datetime
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
@@ -218,10 +220,33 @@ def clear_schedules():
 def calendar():
     return render_template('calendar.html')
 
+@app.route('/summary')
+def summary():
+    return render_template('summary.html')
+
 @app.route('/diary')
 @login_required
 def diary():
     return render_template('emotion.html')
+
+nltk.download('vader_lexicon')
+sia = SentimentIntensityAnalyzer()
+
+def analyze_emotion(diary_text):
+    """Analyze diary text and return an emotion emoji."""
+    sentiment_scores = sia.polarity_scores(diary_text)
+    compound_score = sentiment_scores['compound']
+
+    if compound_score > 0.5:
+        return "😊"
+    elif compound_score > 0:
+        return "😲"
+    elif compound_score == 0:
+        return "😐"
+    elif compound_score > -0.5:
+        return "😞"
+    else:
+        return "😡"
 
 @app.route('/save_diary', methods=['POST'])
 @login_required
@@ -229,11 +254,14 @@ def save_diary():
     data = request.json
     username = data.get("user")
     date = data.get("date")
-    emotion = data.get("emotion")
     diary_text = data.get("diary")
+
+    # 감정 데이터가 없으면 NLTK로 분석
+    emotion = data.get("emotion") or analyze_emotion(diary_text)
 
     users = load_users()
     user_found = False
+
     for user in users["users"]:
         if user["user"] == username:
             user_found = True
@@ -247,6 +275,7 @@ def save_diary():
             break
 
     if not user_found:
+        # 새로운 사용자 생성 및 일기 저장
         users["users"].append({
             "user": username,
             "diaries": [{
@@ -257,26 +286,40 @@ def save_diary():
         })
 
     save_users(users)
-    return jsonify({"message": "Diary saved successfully"})
+    return jsonify({"message": "Diary saved successfully", "emotion": emotion})
 
-# 특정 날짜의 일기를 가져오는 API
 @app.route('/get_diary', methods=['GET'])
 @login_required
 def get_diary():
-    username = request.args.get("user")
-    date = request.args.get("date")
+    username = request.args.get('user')
+    date = request.args.get('date')  # YYYY-MM-DD 형식의 날짜
+
     users = load_users()
 
-    for user in users["users"]:
-        if user["user"] == username:
-            # 해당 날짜의 일기를 가져옴
-            diaries = [
-                diary for diary in user.get("diaries", [])
-                if diary.get("date") == date
-            ]
-            return jsonify({"diaries": diaries})
-    
-    return jsonify({"error": "No diaries found for this date"}), 404
+    for user in users['users']:
+        if user['user'] == username:
+            diaries = user.get('diaries', [])
+            # 날짜가 일치하는 일기를 검색
+            for diary in diaries:
+                if diary['date'] == date:
+                    return jsonify(diary)
+
+    return jsonify({'error': 'Diary not found for the given date.'}), 404
+
+@app.route('/get_user_diaries', methods=['POST'])
+def get_user_diaries():
+    data = request.get_json()  # 클라이언트에서 보낸 JSON 데이터
+    username = data.get('user')  # 사용자 이름 추출
+
+    if not username:
+        return jsonify({'error': 'Missing username'}), 400
+
+    users = load_users()
+    for user in users['users']:
+        if user['user'] == username:
+            return jsonify({'diaries': user.get('diaries', [])})  # 일기 목록 반환
+
+    return jsonify({'error': 'User not found'}), 404
 
 
 if __name__ == '__main__':

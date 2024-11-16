@@ -10,26 +10,28 @@
 
 <body>
     <main id="main">
-
-        <img src="../static/image/ChevronLeft (1).png" alt="" class="prev-btn"> <!-- 전으로 돌아가기 버튼 이미지 -->
-
+        <a href="http://127.0.0.1:5001/main"><img src="../static/image/ChevronLeft (1).png" alt="" class="prev-btn"></a> <!-- 전으로 돌아가기 버튼 이미지 -->
         <div class="all-container">
-        <div class="show-container">
-            <p>한 줄 요약</p>
-            <div class="first-show-container">
+            <div class="show-container">
+                <p>한 줄 요약</p>
+                <div class="first-show-container"></div> <!-- 일기 요약이 여기에 표시됩니다 -->
 
-            </div>
+                <p class="feeling">감정 요약</p>
+                <div class="second-show-container">
+                    <div class="emotion-summary"></div> <!-- 감정 요약이 여기에 표시됩니다 -->
 
-            <p class="feeling">감정 요약</p>
-            <div class="second-show-container">
-                <a href="#"><div class="next-container">
-                    <div class="text">달력으로 넘어가기</div>
-                    <img src="../static/image/ChevronRight (1).png" alt="" class="next-btn">
-                </div></a>
+                    <a href="http://127.0.0.1:5001/calendar">
+                        <div class="next-container">
+                            <div class="text">달력으로 넘어가기</div>
+                            <img src="../static/image/ChevronRight (1).png" alt="" class="next-btn">
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
     </main>
+
+    <script src="../static/js/summary.js"></script>
 </body>
 
 </html>

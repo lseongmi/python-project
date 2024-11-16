@@ -14,24 +14,24 @@
         <div class="show-container">
             <p>감정선택</p>
             <div class="choose-feeling-container">
-                <img src="../static/image/행복한 표정.png" alt="" class="feeling-emoji">
-                <img src="../static/image/놀라운표정.png" alt="" class="feeling-emoji">
-                <img src="../static/image/soso표정.png" alt="" class="feeling-emoji">
-                <img src="../static/image/기분 조금 안좋은표정.png" alt="" class="feeling-emoji">
-                <img src="../static/image/기분 드러운 표정.png" alt="" class="feeling-emoji">
+                <img src="../static/image/행복한 표정.png" alt="😊" class="feeling-emoji" data-feeling="😊">
+                <img src="../static/image/놀라운표정.png" alt="😲" class="feeling-emoji" data-feeling="😲">
+                <img src="../static/image/soso표정.png" alt="😐" class="feeling-emoji" data-feeling="😐">
+                <img src="../static/image/기분 조금 안좋은표정.png" alt="😞" class="feeling-emoji" data-feeling="😞">
+                <img src="../static/image/기분 드러운 표정.png" alt="😡" class="feeling-emoji" data-feeling="😡">
             </div>
 
             <p>일기 작성</p>
             <form action="" id="diary-container">
-                <div class="write" contenteditable="true"></div>
-                <a href="#"> 
-                <div class="next-container">
-                    <span>일기 요약 보러가기</span>
-                    <img src="../static/image/ChevronRight (1).png" alt="" class="next-btn">
-                </div>
-            </a>
+                <div class="write" contenteditable="true" id="diary-text"></div>
+                <a href="http://127.0.0.1:5001/summary"> 
+                    <div class="next-container">
+                        <span>일기 요약 보러가기</span>
+                        <img src="../static/image/ChevronRight (1).png" alt="" class="next-btn">
+                    </div>
+                </a>
             </form>
-            <button>완료</button>
+            <button id="save-button">완료</button>
         </div>
     </main>
 
