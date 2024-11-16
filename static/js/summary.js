@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const emotionSummaryContainer = document.querySelector('.emotion-summary');
-    const summaryContainer = document.querySelector('.first-show-container');
+    const summaryContainer = document.querySelector('.diary-summary');
 
     // 현재 로그인된 사용자 정보 가져오기
     async function fetchCurrentUser() {
