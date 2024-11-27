@@ -244,9 +244,9 @@ def analyze_emotion(diary_text):
     elif compound_score == 0:
         return "😐"
     elif compound_score > -0.5:
-        return "😞"
+        return "🫤"
     else:
-        return "😡"
+        return "😞"
 
 @app.route('/save_diary', methods=['POST'])
 @login_required

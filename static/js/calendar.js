@@ -29,7 +29,6 @@ function getLoggedInUser() {
 }
 
 // 완료되지 않은 일정을 가져오는 함수
-// 완료되지 않은 일정을 가져오는 함수
 function fetchIncompleteSchedules(date) {
   getLoggedInUser().then(username => {
       if (username) {
@@ -64,8 +63,8 @@ function fetchDiaryForDate(date) {
     "😊": "../static/image/행복한 표정.png",
     "😲": "../static/image/놀라운 표정.png",
     "😐": "../static/image/soso표정.png",
-    "😞": "../static/image/기분 드러운 표정.png",
-    "😡": "../static/image/기분 조금 안좋은표정.png"
+    "🫤": "../static/image/기분 조금 안좋은 표정.png",
+    "😞": "../static/image/기분 드러운 표정.png"
   };
 
   getLoggedInUser().then(username => {
