@@ -31,12 +31,18 @@ function getLoggedInUser() {
 }
 
 function submitDiary() {
-    const diaryText = document.querySelector(".write").innerText; // 작성된 일기 내용 가져오기
+    const diaryText = document.querySelector(".write").innerText.trim(); // 작성된 일기 내용 가져오기 (공백 제거)
     const date = getCurrentDate();
 
     // 감정이 선택되지 않은 경우 경고
     if (!selectedEmotion) {
         alert("감정을 선택해주세요!");
+        return;
+    }
+
+    // 일기 내용이 비어 있는 경우 경고
+    if (!diaryText) {
+        alert("일기 내용을 작성해주세요!");
         return;
     }
 

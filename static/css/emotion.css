@@ -41,6 +41,14 @@ p {
     font-size: 15px;
 }
 
+#save-button {
+    width: 50%;
+    background-color: #C7D8C2;
+    border: 1px solid #C7D8C2;
+    border-radius: 10px;
+    height: 2rem;
+}
+
 
 
 #diary-container {
